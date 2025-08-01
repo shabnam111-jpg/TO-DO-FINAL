@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do - Task Manager</title>
+    <meta name="description" content="A modern, feature-rich to-do list application inspired by Microsoft To-Do">
+    <meta name="theme-color" content="#0078d4">
+    <!-- <link rel="manifest" href="manifest.json"> Commented out to prevent CORS error when running from file system -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzAwNzhkNCIvPgo8cGF0aCBkPSJNOSAxNkwxNyA4TTE3IDhIMTFNMTcgOFYxNCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="app-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="logo-shine"></div>
+                    </div>
+                    <h1>My To-Do</h1>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item" data-filter="all">
+                        <i class="fas fa-home"></i>
+                        <span>My Day</span>
+                        <span class="task-count" id="allCount">0</span>
+                    </li>
+                    <li class="nav-item" data-filter="important">
+                        <i class="fas fa-star"></i>
+                        <span>Important</span>
+                        <span class="task-count" id="importantCount">0</span>
+                    </li>
+                    <li class="nav-item" data-filter="planned">
+                        <i class="fas fa-calendar"></i>
+                        <span>Planned</span>
+                        <span class="task-count" id="plannedCount">0</span>
+                    </li>
+                    <li class="nav-item" data-filter="completed">
+                        <i class="fas fa-check"></i>
+                        <span>Completed</span>
+                        <span class="task-count" id="completedCount">0</span>
+                    </li>
+                </ul>
+                
+                <div class="lists-section">
+                    <h3>Lists</h3>
+                    <ul class="custom-lists" id="customLists">
+                        <!-- Custom lists will be added here -->
+                    </ul>
+                    <button class="add-list-btn" id="addListBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>New list</span>
+                    </button>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <div class="header-title">
+                    <h2 id="currentListTitle">My Day</h2>
+                    <p id="currentDate"></p>
+                </div>
+                <div class="header-actions">
+                    <button class="sort-btn" id="sortBtn">
+                        <i class="fas fa-sort"></i>
+                        Sort
+                    </button>
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <button class="view-btn" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Task Section -->
+            <div class="add-task-section">
+                <div class="add-task-container">
+                    <button class="add-task-btn" id="addTaskBtn">
+                        <i class="fas fa-plus"></i>
+                        <span>Add a task</span>
+                    </button>
+                </div>
+                
+                <div class="add-task-form hidden" id="addTaskForm">
+                    <div class="task-input-container">
+                        <input type="text" id="taskInput" placeholder="Add a task" maxlength="255">
+                        <div class="task-options">
+                            <button class="option-btn" id="dueDateBtn" title="Add due date">
+                                <i class="fas fa-calendar"></i>
+                            </button>
+                            <button class="option-btn" id="importantBtn" title="Mark as important">
+                                <i class="far fa-star"></i>
+                            </button>
+                            <button class="option-btn" id="categoryBtn" title="Add to list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="addTaskSubmit">Add</button>
+                        <button class="btn btn-secondary" id="cancelAddTask">Cancel</button>
+                    </div>
+                    <div class="additional-options hidden" id="additionalOptions">
+                        <input type="date" id="dueDateInput" class="date-input">
+                        <select id="categorySelect" class="category-select">
+                            <option value="">Select list</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Container -->
+            <div class="tasks-container">
+                <div class="tasks-list" id="tasksList">
+                    <!-- Tasks will be dynamically added here -->
+                </div>
+                
+                <div class="completed-tasks-section" id="completedTasksSection">
+                    <button class="completed-toggle" id="completedToggle">
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Completed</span>
+                        <span class="completed-count" id="completedTasksCount">0</span>
+                    </button>
+                    <div class="completed-tasks-list hidden" id="completedTasksList">
+                        <!-- Completed tasks will be shown here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state hidden" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <h3>Focus on your day</h3>
+                <p>Get things done with My Day, a list that refreshes every day.</p>
+            </div>
+        </main>
+
+        <!-- Task Detail Panel -->
+        <aside class="task-detail-panel hidden" id="taskDetailPanel">
+            <div class="detail-header">
+                <button class="close-detail-btn" id="closeDetailBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="detail-content">
+                <div class="task-title-section">
+                    <div class="task-checkbox">
+                        <input type="checkbox" id="detailTaskCheckbox">
+                        <label for="detailTaskCheckbox"></label>
+                    </div>
+                    <input type="text" id="detailTaskTitle" class="detail-task-title">
+                    <button class="important-star-btn" id="detailImportantBtn">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+                
+                <div class="detail-sections">
+                    <div class="detail-section">
+                        <div class="section-header">
+                            <i class="fas fa-calendar"></i>
+                            <span>Due date</span>
+                        </div>
+                        <input type="date" id="detailDueDate" class="detail-input">
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="section-header">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Add note</span>
+                        </div>
+                        <textarea id="detailNotes" class="detail-textarea" placeholder="Add a note"></textarea>
+                    </div>
+                </div>
+                
+                <div class="detail-actions">
+                    <button class="delete-task-btn" id="deleteTaskBtn">
+                        <i class="fas fa-trash"></i>
+                        Delete task
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay hidden" id="modalOverlay">
+        <div class="modal" id="deleteConfirmModal">
+            <div class="modal-header">
+                <h3>Delete task?</h3>
+            </div>
+            <div class="modal-content">
+                <p>This task will be permanently deleted.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+            </div>
+        </div>
+        
+        <div class="modal hidden" id="addListModal">
+            <div class="modal-header">
+                <h3 id="listModalTitle">Create new list</h3>
+            </div>
+            <div class="modal-content">
+                <input type="text" id="newListInput" placeholder="Enter list name" maxlength="50">
+                <div class="color-picker" id="colorPicker">
+                    <span class="color-picker-label">Choose color:</span>
+                    <div class="color-options">
+                        <div class="color-option" data-color="#0078d4" style="background: #0078d4;"></div>
+                        <div class="color-option" data-color="#00bcf2" style="background: #00bcf2;"></div>
+                        <div class="color-option" data-color="#00b7c3" style="background: #00b7c3;"></div>
+                        <div class="color-option" data-color="#40e0d0" style="background: #40e0d0;"></div>
+                        <div class="color-option" data-color="#107c10" style="background: #107c10;"></div>
+                        <div class="color-option" data-color="#00cc6a" style="background: #00cc6a;"></div>
+                        <div class="color-option" data-color="#ff6b6b" style="background: #ff6b6b;"></div>
+                        <div class="color-option" data-color="#feca57" style="background: #feca57;"></div>
+                        <div class="color-option" data-color="#ff9ff3" style="background: #ff9ff3;"></div>
+                        <div class="color-option" data-color="#54a0ff" style="background: #54a0ff;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="createListBtn">Create</button>
+                <button class="btn btn-secondary" id="cancelListBtn">Cancel</button>
+            </div>
+        </div>
+        
+        <div class="modal hidden" id="deleteListModal">
+            <div class="modal-header">
+                <h3>Delete list?</h3>
+            </div>
+            <div class="modal-content">
+                <p>This list and all its tasks will be permanently deleted. This action cannot be undone.</p>
+                <div class="warning-info">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="deleteListWarning"></span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="confirmDeleteListBtn">Delete</button>
+                <button class="btn btn-secondary" id="cancelDeleteListBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sort Menu -->
+    <div class="sort-menu hidden" id="sortMenu">
+        <div class="sort-option" data-sort="default">
+            <i class="fas fa-sort"></i>
+            <span>Default</span>
+        </div>
+        <div class="sort-option" data-sort="alphabetical">
+            <i class="fas fa-sort-alpha-down"></i>
+            <span>Alphabetically</span>
+        </div>
+        <div class="sort-option" data-sort="dueDate">
+            <i class="fas fa-calendar"></i>
+            <span>Due date</span>
+        </div>
+        <div class="sort-option" data-sort="important">
+            <i class="fas fa-star"></i>
+            <span>Important first</span>
+        </div>
+        <div class="sort-option" data-sort="created">
+            <i class="fas fa-clock"></i>
+            <span>Creation date</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
