@@ -162,7 +162,8 @@ body {
     border-radius: 4px;
     cursor: pointer;
     color: #605e5c;
-    display: none;
+    display: none; /* Hidden by default */
+    z-index: 201; /* Ensure it's above other elements */
 }
 
 .sidebar-toggle:hover {
