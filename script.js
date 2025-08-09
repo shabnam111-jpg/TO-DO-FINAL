@@ -235,7 +235,13 @@ class TodoApp {
         });
 
         // Sidebar toggle for mobile
-        document.getElementById('sidebarToggle').addEventListener('click', () => this.toggleSidebar());
+        document.getElementById('sidebarToggle').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleSidebar();
+        });
+
+        // Overlay for closing sidebar
+        document.getElementById('overlay').addEventListener('click', () => this.closeSidebar());
 
         // Close menus when clicking outside
         document.addEventListener('click', (e) => this.handleOutsideClick(e));
@@ -1236,12 +1242,21 @@ class TodoApp {
 
     // Mobile UI
     toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('overlay');
+        const isOpen = sidebar.classList.toggle('open');
+        
+        if (isOpen) {
+            overlay.classList.remove('hidden');
+        } else {
+            overlay.classList.add('hidden');
+        }
     }
 
     closeSidebar() {
         if (window.innerWidth <= 768) {
             document.querySelector('.sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.add('hidden');
         }
     }
 
