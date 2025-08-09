@@ -684,24 +684,6 @@ body {
     border-top: 1px solid #e1e5e9;
     display: flex;
     gap: 12px;
-    align-items: center;
-}
-
-.date-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.date-input {
-    padding-left: 30px; /* Make space for icon */
-}
-
-.date-input-icon {
-    position: absolute;
-    left: 10px;
-    color: #605e5c;
-    pointer-events: none;
 }
 
 .date-input, .category-select {
