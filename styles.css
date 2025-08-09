@@ -572,7 +572,6 @@ body {
     position: relative;
     overflow: hidden;
     z-index: 10;
-    pointer-events: auto;
 }
 
 .option-btn::before {
@@ -692,11 +691,6 @@ body {
     border-radius: 6px;
     font-size: 14px;
     outline: none;
-    display: none; /* Hide by default */
-}
-
-.date-input.visible, .category-select.visible {
-    display: block; /* Show when needed */
 }
 
 .date-input:focus, .category-select:focus {
